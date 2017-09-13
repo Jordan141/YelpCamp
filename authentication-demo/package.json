@@ -1,23 +1,15 @@
 {
-  "name": "yelpcamp",
+  "name": "authdemo",
   "version": "1.0.0",
-  "description": "YelpCamp v1",
+  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jordan141/YelpCamp.git"
-  },
   "author": "Jordan Moss",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Jordan141/YelpCamp/issues"
-  },
-  "homepage": "https://github.com/Jordan141/YelpCamp#readme",
   "dependencies": {
-    "body-parser": "^1.18.0",
+    "body-parser": "^1.18.1",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "express-session": "^1.15.5",
