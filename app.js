@@ -37,7 +37,7 @@ passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
-//Checks if user is currently logged in or not and provides username
+//Checks if user is currently logged in or not and provides current user
 app.use((req,res,next) => {res.locals.currentUser = req.user; next()})
 
 app.use('/', authRoutes)
