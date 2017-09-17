@@ -25,7 +25,7 @@ router.post('/register', (req,res) => {
 
 
 router.get('/login',(req,res) => {
-    res.render('login')
+    res.render('login', {message: req.flash('error')})
 })
 router.post('/login', passport.authenticate('local',
     {

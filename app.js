@@ -4,6 +4,7 @@ const express =     require('express'),
       IP =          process.env.IP,
       bodyParser =  require('body-parser'),
       mongoose =    require('mongoose'),
+      flash =       require('connect-flash'),
       passport =    require('passport'),
       passportLocalMongoose = require('passport-local-mongoose'),
       LocalStrategy = require('passport-local'),
@@ -32,13 +33,19 @@ app.use(require('express-session')({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
+app.use(flash())
 
 passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 //Checks if user is currently logged in or not and provides current user
-app.use((req,res,next) => {res.locals.currentUser = req.user; next()})
+app.use((req,res,next) => {
+    res.locals.currentUser = req.user; next()
+    res.locals.message = req.flash('error')
+    next()
+    }
+)
 
 app.use('/', authRoutes)
 app.use('/campgrounds', campgroundRoutes)
