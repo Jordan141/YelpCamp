@@ -1,12 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const Campground = require('../models/campground')
+const {isLoggedIn, checkCampgroundOwnership} = require('../middleware')
 
 //INDEX ROUTE -- Show all campgrounds
 router.get('/', (req, res) => {
-    console.log(req.user)
-    //res.render('campgrounds', {campgrounds: campgrounds})
-    //Get all campgrounds from db, then render
     Campground.find({}, (err, campgrounds) => {
         if(err) console.log(err)
         else{
@@ -65,30 +63,4 @@ router.delete('/:id',checkCampgroundOwnership, (req,res) => {
     Campground.findByIdAndRemove(req.params.id, (err) => res.redirect('/campgrounds'));
 })
 
-
-//middleware
-function isLoggedIn(req,res,next){
-    if(req.isAuthenticated()){
-        return next()
-    }
-    res.redirect('/login')
-}
-
-function checkCampgroundOwnership(req, res, next){
-    if(req.isAuthenticated()){
-        Campground.findById(req.params.id, (err, foundCampground) => {
-            if(err){
-                res.redirect('back')
-            }else{
-                if(foundCampground.author.id.equals(req.user._id)){
-                    next()
-                } else {
-                    res.redirect('back')
-                }
-            }
-        })   
-    } else {
-       res.redirect('back')
-    }
-}
 module.exports = router
