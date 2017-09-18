@@ -6,7 +6,6 @@ const {isLoggedIn, checkCommentOwnership} = require('../middleware')
 
 
 router.get('/new',isLoggedIn, (req,res) => {
-    //Find campground by id
     Campground.findById(req.params.id, (err, cg) => {
         if(err){
             console.log(err)
@@ -25,6 +24,7 @@ router.post('/', (req,res) => {
         }else{
             Comment.create(req.body.comment, (err, comment) => {
                 if(err){
+                    req.flash('error', 'Oops! Something went wrong, please contact your web admin')
                     console.log(err)
                 }else{
                     comment.author.id = req.user._id
@@ -68,6 +68,7 @@ router.delete('/:comment_id', checkCommentOwnership, (req,res) => {
             console.log(err)
             res.redirect('back')
         } else {
+            req.flash('success', 'Comment deleted')
             res.redirect(`/campgrounds/${req.params.id}`)
         }
     })

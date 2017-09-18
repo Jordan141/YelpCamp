@@ -8,12 +8,18 @@
     </head>
     <body>
     
-    <!---
     <div class="container">
-        Add error handling container back from 
-        https://github.com/nax3t/background-slider
+        <% if(error && error.length > 0){ %>
+            <div class="alert alert-danger" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+        <% if(success && success.length > 0){ %>
+            <div class="alert alert-success" role="alert">
+                <%= success %>
+            </div>
+        <% } %>
     </div>
-    -->
     
     <div id="landing-header">
  		<h1>Welcome to YelpCamp!</h1>

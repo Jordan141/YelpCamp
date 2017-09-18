@@ -1,7 +1,7 @@
 const express = require('express')
-const router = express.Router()
+let router = express.Router()
 const Campground = require('../models/campground')
-const {isLoggedIn, checkCampgroundOwnership} = require('../middleware')
+let {isLoggedIn, checkCampgroundOwnership} = require('../middleware')
 
 //INDEX ROUTE -- Show all campgrounds
 router.get('/', (req, res) => {
@@ -15,10 +15,10 @@ router.get('/', (req, res) => {
 
 //CREATE ROUTE
 router.post('/',isLoggedIn, (req,res) => {
-    const {name, image, description}  = req.body;
+    const {name, price, image, description}  = req.body;
     const author = {id: req.user._id, username: req.user.username}
     //Create a new cg and save to DB
-    Campground.create({name, image, description, author}, (err,data) => {
+    Campground.create({name, price, image, description, author}, (err,data) => {
         if(err) {
             console.log(err)
         }else{

@@ -41,8 +41,9 @@ passport.deserializeUser(User.deserializeUser())
 
 //Checks if user is currently logged in or not and provides current user
 app.use((req,res,next) => {
-    res.locals.currentUser = req.user; next()
-    res.locals.message = req.flash('error')
+    res.locals.currentUser = req.user;
+    res.locals.error = req.flash('error')
+    res.locals.success = req.flash('success')
     next()
     }
 )
