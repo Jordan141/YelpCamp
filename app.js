@@ -1,31 +1,27 @@
-const express =     require('express'),
-      app =         express(),
-      PORT =        process.env.PORT,
-      IP =          process.env.IP,
-      bodyParser =  require('body-parser'),
-      mongoose =    require('mongoose'),
-      flash =       require('connect-flash'),
-      passport =    require('passport'),
-      passportLocalMongoose = require('passport-local-mongoose'),
-      LocalStrategy = require('passport-local'),
-      methodOverride = require('method-override'),
-      Campground =  require('./models/campground'),
-      Comment =     require('./models/comment'),
-      User =        require('./models/user'),
-      seedDB =      require("./seeds")
+const express           = require('express'),
+      app               = express(),
+      PORT              = process.env.PORT || 3000,
+      IP                = process.env.IP || "127.0.0.1",
+      bodyParser        = require('body-parser'),
+      mongoose          = require('mongoose'),
+      flash             = require('connect-flash'),
+      passport          = require('passport'),
+      LocalStrategy     = require('passport-local'),
+      methodOverride    = require('method-override'),
+      User              = require('./models/user')
 
-const commentRoutes =       require('./routes/comments'),
-      campgroundRoutes =    require('./routes/campgrounds'),
-      authRoutes =          require('./routes/index')
+const commentRoutes     = require('./routes/comments'),
+      campgroundRoutes  = require('./routes/campgrounds'),
+      authRoutes        = require('./routes/index')
 
 mongoose.connect('mongodb://localhost/yelp_camp')
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'))
-//seedDB() //seed the db
 
 //PASSPORT CONFIGURATION
 app.use(require('express-session')({
+    //Change this key for your project
     secret:'denmarkisbetterthanswedenandfinland',
     resave: false,
     saveUninitialized: false
@@ -52,6 +48,4 @@ app.use('/', authRoutes)
 app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/comments', commentRoutes)
 
-app.listen(PORT, IP, () => {
-    console.log('Yelpcamp server has started.')
-})
+app.listen(PORT, IP)
