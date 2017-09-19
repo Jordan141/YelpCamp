@@ -29,6 +29,7 @@
     "passport-local-mongoose": "^4.2.1"
   },
   "devDependencies": {
+    "eslint": "^4.7.1",
     "nodemon": "^1.12.1"
   }
 }
