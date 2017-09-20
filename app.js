@@ -1,6 +1,6 @@
 const express           = require('express'),
       app               = express(),
-      PORT              = process.env.PORT || 3000,
+      PORT              = process.env.PORT || 8000,
       IP                = process.env.IP || "127.0.0.1",
       bodyParser        = require('body-parser'),
       mongoose          = require('mongoose'),
@@ -8,13 +8,14 @@ const express           = require('express'),
       passport          = require('passport'),
       LocalStrategy     = require('passport-local'),
       methodOverride    = require('method-override'),
-      User              = require('./models/user')
+      User              = require('./models/user'),
+      {db}              = require('./config.json')
 
 const commentRoutes     = require('./routes/comments'),
       campgroundRoutes  = require('./routes/campgrounds'),
       authRoutes        = require('./routes/index')
 
-mongoose.connect('mongodb://localhost/yelp_camp')
+mongoose.connect(`mongodb://${db.username}:${db.password}@ds143774.mlab.com:43774/jmoss-yelpcamp`)
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'))
