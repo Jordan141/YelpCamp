@@ -8,8 +8,9 @@ router.get('/', (req,res) => {
 })
 
 router.get('/register', (req,res) => {
-    res.render('register')
+    res.render('register', {page: 'register'})
 })
+
 router.post('/register', (req,res) => {
     let newGuy = new User({username: req.body.username})
     User.register(newGuy, req.body.password, (err, user) => {
@@ -26,7 +27,7 @@ router.post('/register', (req,res) => {
 
 
 router.get('/login', (req,res) => {
-    res.render('login')
+    res.render('login', {page: 'login'})
 })
 router.post('/login', passport.authenticate('local',
     {

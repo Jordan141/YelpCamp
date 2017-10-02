@@ -6,7 +6,7 @@ let {isLoggedIn, checkCampgroundOwnership} = require('../middleware')
 //INDEX ROUTE -- Show all campgrounds
 router.get('/', (req, res) => {
     Campground.find({}, (err, campgrounds) => {
-        res.render('campgrounds/index', {campgrounds, currentUser: req.user})
+        res.render('campgrounds/index', {campgrounds, currentUser: req.user, page: 'campgrounds'})
     })
 })
 
