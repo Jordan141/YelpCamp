@@ -12,10 +12,11 @@ router.get('/', (req, res) => {
 
 //CREATE ROUTE
 router.post('/', isLoggedIn, (req,res) => {
-    const {name, price, image, description}  = req.body;
+    const {name, cost, image, description}  = req.body;
+    console.log('Cost', cost)
     const author = {id: req.user._id, username: req.user.username}
     //Create a new cg and save to DB
-    Campground.create({name, price, image, description, author}, err => {
+    Campground.create({name, image, cost, description, author}, err => {
         if(err){
             return err
         }
@@ -53,6 +54,7 @@ router.put('/:id', checkCampgroundOwnership, (req,res) => {
         if(err){
             return err
         }
+        console.log(req.body.campground)
         res.redirect('/campgrounds/' + req.params.id)
     })
 })
