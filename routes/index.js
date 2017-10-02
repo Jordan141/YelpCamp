@@ -12,7 +12,11 @@ router.get('/register', (req,res) => {
 })
 
 router.post('/register', (req,res) => {
+    
     let newGuy = new User({username: req.body.username})
+    if(req.body.adminCode === 'secretsecretcode123'){//CHANGE THIS IN PRODUCTION{
+        newGuy.isAdmin = true
+    }
     User.register(newGuy, req.body.password, (err, user) => {
         if(err){
             req.flash('error', err.message)
