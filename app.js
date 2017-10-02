@@ -48,5 +48,6 @@ app.use((req,res,next) => {
 app.use('/', authRoutes)
 app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/comments', commentRoutes)
+app.locals.moment = require('moment')
 
 app.listen(PORT, IP)
