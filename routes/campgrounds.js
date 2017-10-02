@@ -2,6 +2,7 @@ const express = require('express')
 let router = express.Router()
 const Campground = require('../models/campground')
 let {isLoggedIn, checkCampgroundOwnership} = require('../middleware')
+const geocoder = require('geocoder')
 
 //INDEX ROUTE -- Show all campgrounds
 router.get('/', (req, res) => {
@@ -13,14 +14,18 @@ router.get('/', (req, res) => {
 //CREATE ROUTE
 router.post('/', isLoggedIn, (req,res) => {
     const {name, cost, image, description}  = req.body;
-    console.log('Cost', cost)
     const author = {id: req.user._id, username: req.user.username}
-    //Create a new cg and save to DB
-    Campground.create({name, image, cost, description, author}, err => {
-        if(err){
-            return err
-        }
-        res.redirect('/campgrounds')
+
+    geocoder.geocode(req.body.location, (err, data) => {
+        let {lat, lng} = data.results[0].geometry.location
+        let location = data.results[0].formatted_address
+
+        Campground.create({name, image, cost, description, author, location, lat, lng}, err => {
+            if(err){
+                throw err;
+            }
+            res.redirect('/campgrounds')
+        })
     })
 })
 
@@ -50,12 +55,18 @@ router.get('/:id/edit', checkCampgroundOwnership, (req,res) => {
 })
 //UPDATE CAMPGROUND ROUTE
 router.put('/:id', checkCampgroundOwnership, (req,res) => {
-    Campground.findByIdAndUpdate(req.params.id, req.body.campground, err => {
-        if(err){
-            return err
-        }
-        console.log(req.body.campground)
-        res.redirect('/campgrounds/' + req.params.id)
+
+    geocoder.geocode(req.body.location, (err, data) => {
+        let {lat, lng} = data.results[0].geometry.location
+        let location = data.results[0].formatted_address
+        let newData = {...req.body.campground, location, lat, lng}
+        Campground.findByIdAndUpdate(req.params.id, {$set: newData} , err => {
+            if(err){
+                throw err
+            }
+            req.flash("success","Successfully Updated!")
+            res.redirect('/campgrounds/' + req.params.id)
+        })
     })
 })
 
