@@ -4,6 +4,7 @@ const express           = require('express'),
       IP                = process.env.IP || "127.0.0.1",
       bodyParser        = require('body-parser'),
       mongoose          = require('mongoose'),
+      cookieParser      = require("cookie-parser"),
       flash             = require('connect-flash'),
       passport          = require('passport'),
       LocalStrategy     = require('passport-local'),
@@ -30,6 +31,7 @@ app.use(require('express-session')({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
+app.use(cookieParser('secret'))
 app.use(flash())
 
 passport.use(new LocalStrategy(User.authenticate()))
