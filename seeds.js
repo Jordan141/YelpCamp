@@ -1,8 +1,7 @@
 const Campground = require('./models/campground'),
-      Comment = require('./models/comment')
-
-const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tempus urna elit, eu efficitur justo placerat et. Cras vitae erat id mi semper volutpat. Suspendisse at dapibus nisi. Vivamus tortor diam, elementum eu nulla vitae, finibus semper leo. Aliquam augue magna, tincidunt elementum nulla commodo, vulputate dignissim massa. Vivamus quis pharetra nunc. Sed quis nibh id tortor faucibus tempus quis id turpis. '
-
+      Comment = require('./models/comment'),
+      User = require('./models/user')
+const lorem = '';
 const data = [
     {
         name: 'Cloud\'s Rest',
@@ -36,25 +35,35 @@ function seedDB (){
             throw err;
         }
         
-        data.forEach(seed => Campground.create(seed, (err, campground) => {
-            if(err) {
-                throw err;
-            }
-            Comment.create(
-                {
-                    text: 'This place is great, but I wish there was internet!',
-                    author: 'Homer'
-                },
-                (err, comment) => {
-                    if(err){
-                        throw err;
-                    } else {
-                    campground.comments.push(comment)
-                    campground.save()
-                    }
-                })
-            })
-        )
+        // data.forEach(seed => Campground.create(seed, (err, campground) => {
+        //     if(err) {
+        //         throw err;
+        //     }
+        //     Comment.create(
+        //         {
+        //             text: 'This place is great, but I wish there was internet!',
+        //             author: 'Homer'
+        //         },
+        //         (err, comment) => {
+        //             if(err){
+        //                 throw err;
+        //             } else {
+        //             campground.comments.push(comment)
+        //             campground.save()
+        //             }
+        //         })
+        //     })
+        // )
+    })
+    User.remove({}, err => {
+        if(err) {
+            throw err;
+        }
+    })
+    Comment.remove({}, err => {
+        if(err) {
+            throw err;
+        }
     })
 }
 

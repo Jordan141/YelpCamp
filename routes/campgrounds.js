@@ -4,6 +4,10 @@ const Campground = require('../models/campground')
 let {isLoggedIn, checkCampgroundOwnership} = require('../middleware')
 const geocoder = require('geocoder')
 
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
 //INDEX ROUTE -- Show all campgrounds
 router.get('/', (req, res) => {
     Campground.find({}, (err, campgrounds) => {

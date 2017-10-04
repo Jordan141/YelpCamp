@@ -29,6 +29,7 @@ router.post('/', isLoggedIn, (req,res) => {
             comment.save()
             campground.comments.push(comment)
             campground.save()
+            req.flash('success', 'Created a comment!');
             res.redirect(`/campgrounds/${campground._id}`)
         })
     })
@@ -58,7 +59,7 @@ router.delete('/:comment_id', checkCommentOwnership, (req,res) => {
         if(err){
             res.redirect('back')
         }
-        req.flash('success', 'Comment deleted')
+        req.flash('error', 'Comment deleted')
         res.redirect(`/campgrounds/${req.params.id}`)
     })
 })
