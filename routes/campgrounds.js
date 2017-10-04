@@ -10,9 +10,21 @@ function escapeRegex(text) {
 
 //INDEX ROUTE -- Show all campgrounds
 router.get('/', (req, res) => {
-    Campground.find({}, (err, campgrounds) => {
-        res.render('campgrounds/index', {campgrounds, currentUser: req.user, page: 'campgrounds'})
-    })
+    if(req.query.search && req.xhr) {
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        // Get all campgrounds from DB
+        Campground.find({name: regex}, function(err, allCampgrounds){
+           if(err){
+              console.log(err);
+           } else {
+              res.status(200).json(allCampgrounds);
+           }
+        })
+    } else {
+        Campground.find({}, (err, campgrounds) => {
+            res.render('campgrounds/index', {campgrounds, currentUser: req.user, page: 'campgrounds'})
+        })
+    }
 })
 
 //CREATE ROUTE
