@@ -9,6 +9,13 @@
         </div>
         <h5>Bio:</h5>
         <p><%= user.bio %></p> 
+        <% if(currentUser && user._id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+            <div class = "text-center">
+                <a class = " btn btn-lg btn-default" href = "/users/<%= user._id %>/edit">
+                    Edit Profile
+                </a>
+            </div>
+        <% } %>
     </div>
     <div class = "col-md-8">
         <h3><%= user.username %>'s campgrounds:</h3>

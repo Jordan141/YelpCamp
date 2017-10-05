@@ -15,6 +15,9 @@
   "bugs": {
     "url": "https://github.com/Jordan141/YelpCamp/issues"
   },
+  "engines": {
+    "node": "8.5.0"
+  },
   "homepage": "https://github.com/Jordan141/YelpCamp#readme",
   "dependencies": {
     "body-parser": "^1.18.0",

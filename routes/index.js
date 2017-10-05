@@ -3,6 +3,7 @@ const router = express.Router()
 const passport = require('passport')
 const User = require('../models/user')
 const Campground = require('../models/campground')
+const {isLoggedIn, checkCommentOwnership} = require('../middleware')
 
 router.get('/', (req,res) => {
     res.render("landing")
@@ -58,7 +59,7 @@ router.get('/logout', (req,res) => {
 })
 
 //User profiles route
-router.get('/users/:id', (req,res) => {
+router.get('/users/:id', isLoggedIn, (req,res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if(err){
             req.flash('error', 'Oops! Something went wrong!')
@@ -72,6 +73,30 @@ router.get('/users/:id', (req,res) => {
             res.render('users/show', {user: foundUser, campgrounds})
         })
     })
+})
+
+//user - EDIT ROUTE
+router.get("/users/:id/edit", isLoggedIn, (req, res) => {
+     User.findById(req.params.id, (err, foundUser) => { 
+        if(err){
+          res.redirect("back")
+        } else {
+        res.render("users/edit", {user: foundUser})
+        }
+     })
+})
+
+//Update ROUTE
+router.put("/users/:id", isLoggedIn, (req, res) => {
+    const newData = {firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, avatar: req.body.avatar, bio: req.body.bio};
+    User.findByIdAndUpdate(req.params.id, {$set: newData}, (err, user) => {
+        if(err){
+             res.redirect("back")
+        } else {
+            req.flash("success","Profile Updated!")
+            res.redirect("/users/" + user._id)
+    }
+  })
 })
 
 
