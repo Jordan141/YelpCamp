@@ -18,6 +18,7 @@ const commentRoutes     = require('./routes/comments'),
 
 mongoose.connect(`mongodb://${db.username}:${db.password}@ds143774.mlab.com:43774/jmoss-yelpcamp`)
 app.set('view engine', 'ejs')
+
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'))
 
@@ -28,6 +29,7 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false
 }))
+
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
@@ -39,11 +41,11 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 //Set local variables
-app.use((req,res,next) => {
-    res.locals.currentUser = req.user;
-    res.locals.error = req.flash('error')
-    res.locals.success = req.flash('success')
-    next()
+app.use((req, res, next) => {
+        res.locals.currentUser = req.user;
+        res.locals.error = req.flash('error')
+        res.locals.success = req.flash('success')
+        next()
     }
 )
 
