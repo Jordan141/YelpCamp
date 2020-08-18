@@ -14,7 +14,7 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
-    
+    if(!__registerCheck(body)) return res.send(500) 
     let newUser = new User({
         username: req.body.username,
         firstName: req.body.firstName,
@@ -41,10 +41,30 @@ router.post('/register', (req, res) => {
     })
 })
 
+function __registerCheck(body) {
+    switch(body) {
+        case body.username === undefined:
+            return false
+        case body.firstName === undefined:
+            return false
+        case body.lastName === undefined:
+            return false
+        case body.email === undefined:
+            return false
+        case body.avatar === undefined:
+            return false
+        case body.bio === undefined:
+            return false
+        default:
+            return true
+    }
+}
+
 
 router.get('/login', (req, res) => {
     res.render('login', {page: 'login'})
 })
+
 router.post('/login', passport.authenticate('local',
     {
         successRedirect: '/campgrounds',
