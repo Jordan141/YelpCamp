@@ -5,15 +5,15 @@ const User = require('../models/user')
 const Campground = require('../models/campground')
 const {isLoggedIn, checkCommentOwnership} = require('../middleware')
 
-router.get('/', (req,res) => {
+router.get('/', (req, res) => {
     res.render("landing")
 })
 
-router.get('/register', (req,res) => {
+router.get('/register', (req, res) => {
     res.render('register', {page: 'register'})
 })
 
-router.post('/register', (req,res) => {
+router.post('/register', (req, res) => {
     
     let newUser = new User({
         username: req.body.username,
@@ -42,7 +42,7 @@ router.post('/register', (req,res) => {
 })
 
 
-router.get('/login', (req,res) => {
+router.get('/login', (req, res) => {
     res.render('login', {page: 'login'})
 })
 router.post('/login', passport.authenticate('local',
@@ -54,14 +54,14 @@ router.post('/login', passport.authenticate('local',
     }
 ))
 
-router.get('/logout', (req,res) => {
+router.get('/logout', (req, res) => {
     req.logout()
     req.flash("success", "See you later!");
     res.redirect('/campgrounds')
 })
 
 //User profiles route
-router.get('/users/:id', isLoggedIn, (req,res) => {
+router.get('/users/:id', isLoggedIn, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if(err){
             req.flash('error', 'Oops! Something went wrong!')
