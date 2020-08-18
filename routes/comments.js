@@ -16,13 +16,12 @@ router.get('/new', isLoggedIn, (req, res) => {
 //CREATE COMMENT
 router.post('/', isLoggedIn, (req,res) => {
     Campground.findById(req.params.id, (err, campground) => {
-        if(err){
-            res.redirect('/campgrounds')
-        }
+        if(err) return res.redirect('/campgrounds')
+
         Comment.create(req.body.comment, (err, comment) => {
             if(err){
                 req.flash('error', 'Oops! Something went wrong, please contact your web admin')
-                return '500'
+                return res.send(500)
             }
             comment.author.id = req.user._id
             comment.author.username = req.user.username
