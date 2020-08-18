@@ -32,10 +32,12 @@ router.post('/register', (req,res) => {
             req.flash('error', err.message)
             return res.render('register')
         }
-        passport.authenticate('local')(req,res, () => {
-            req.flash("success", "Successfully Signed Up! Nice to meet you " + req.body.username);
-            res.redirect('/campgrounds')
-        })
+        passport.authenticate('local', {
+            successRedirect: '/campgrounds',
+            failureRedirect: '/login'}), (req,res, () => {
+                req.flash("success", "Successfully Signed Up! Nice to meet you " + req.body.username)
+            }
+        )
     })
 })
 
