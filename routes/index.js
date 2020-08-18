@@ -28,7 +28,7 @@ router.post('/register', (req, res) => {
         newUser.isAdmin = true
     }
     User.register(newUser, req.body.password, (err, user) => {
-        if(err){
+        if(err || req.body.password === undefined){
             req.flash('error', err.message)
             return res.render('register')
         }
