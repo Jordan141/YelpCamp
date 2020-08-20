@@ -6,6 +6,8 @@ const {isLoggedIn, checkCommentOwnership} = require('../middleware')
 
 
 router.get('/new', isLoggedIn, (req, res) => {
+    if(req.params.id === undefined) return res.send(500)
+
     Campground.findById(req.params.id, (err, campground) => {
         if(err){
            return err
@@ -15,6 +17,8 @@ router.get('/new', isLoggedIn, (req, res) => {
 })
 //CREATE COMMENT
 router.post('/', isLoggedIn, (req,res) => {
+    if(req.params.id === undefined || req.body.comment === undefined) return res.send(500)
+
     Campground.findById(req.params.id, (err, campground) => {
         if(err) return res.redirect('/campgrounds')
 
@@ -35,6 +39,8 @@ router.post('/', isLoggedIn, (req,res) => {
 })
 //COMMENTS - EDIT ROUTE
 router.get('/:comment_id/edit', checkCommentOwnership, (req,res) => {
+    if(req.params.comment_id === undefined) return res.send(500)
+
     Comment.findById(req.params.comment_id, (err, comment) => {
         if(err){
             res.redirect('back')
@@ -44,6 +50,8 @@ router.get('/:comment_id/edit', checkCommentOwnership, (req,res) => {
 })
 //COMMENT UPDATE ROUTE
 router.put('/:comment_id', checkCommentOwnership, (req, res) => {
+    if(req.params.comment_id === undefined || req.body.comment === undefined || req.params.id === undefined) return res.send(500)
+
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, err => {
         if(err){
             res.redirect('back')
@@ -54,6 +62,7 @@ router.put('/:comment_id', checkCommentOwnership, (req, res) => {
 
 //COMMENT DELETE ROUTE
 router.delete('/:comment_id', checkCommentOwnership, (req,res) => {
+    if(req.params.comment_id === undefined || req.params.id === undefined) return res.send(500)
     Comment.findByIdAndRemove(req.params.comment_id, (err) => {
         if(err){
             res.redirect('back')
