@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
            }
         })
     } else {
+        if(req.user === undefined) return res.send(500)
         Campground.find({}, (err, campgrounds) => {
             res.render('campgrounds/index', {campgrounds, currentUser: req.user, page: 'campgrounds'})
         })
@@ -29,6 +30,17 @@ router.get('/', (req, res) => {
 
 //CREATE ROUTE
 router.post('/', isLoggedIn, (req,res) => {
+    if(
+        req.user._id == undefined ||
+        req.user.username === undefined ||
+        req.body === undefined ||
+        req.body.name === undefined ||
+        req.body.cost === undefined ||
+        req.body.image === undefined ||
+        req.body.description === undefined ||
+        req.body.location === undefined
+      )  return res.send(500)
+    
     const {name, cost, image, description}  = req.body;
     const author = {id: req.user._id, username: req.user.username}
 
@@ -52,6 +64,8 @@ router.get('/new', isLoggedIn, (req,res) => {
 
 //SHOW - Shows more info about one campground
 router.get("/:id", (req, res) => {
+    if(req.params.id === undefined) return res.send(500)
+
     Campground.findById(req.params.id).populate("comments").exec((err, campground) => {
         if(err){
             return err
@@ -62,6 +76,8 @@ router.get("/:id", (req, res) => {
 
 //EDIT CAMPGROUND ROUTE
 router.get('/:id/edit', checkCampgroundOwnership, (req,res) => {
+    if(req.params.id === undefined) return res.send(500)
+
     Campground.findById(req.params.id, (err, campground) => {
         if(err){
             return err
@@ -71,7 +87,7 @@ router.get('/:id/edit', checkCampgroundOwnership, (req,res) => {
 })
 //UPDATE CAMPGROUND ROUTE
 router.put('/:id', checkCampgroundOwnership, (req,res) => {
-
+    if(req.body.location === undefined || req.params.id === undefined || req.body.campground === undefined) return res.send(500)
     geocoder.geocode(req.body.location, (err, data) => {
         let {lat, lng} = data.results[0].geometry.location
         let location = data.results[0].formatted_address
@@ -88,6 +104,8 @@ router.put('/:id', checkCampgroundOwnership, (req,res) => {
 
 //DESTROY CAMPGROUND ROUTE
 router.delete('/:id',checkCampgroundOwnership, (req,res) => {
+    if(req.params.id === undefined) return res.send(500)
+
     Campground.findByIdAndRemove(req.params.id, err => {
         if(err){
             return err

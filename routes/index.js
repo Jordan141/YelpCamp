@@ -14,7 +14,7 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
-    
+    if(!__dataCheck(body)) return res.send(500) 
     let newUser = new User({
         username: req.body.username,
         firstName: req.body.firstName,
@@ -28,7 +28,7 @@ router.post('/register', (req, res) => {
         newUser.isAdmin = true
     }
     User.register(newUser, req.body.password, (err, user) => {
-        if(err){
+        if(err || req.body.password === undefined){
             req.flash('error', err.message)
             return res.render('register')
         }
@@ -41,10 +41,25 @@ router.post('/register', (req, res) => {
     })
 })
 
+function __dataCheck(body) {
+    switch(body) {
+        case body.username === undefined:
+        case body.firstName === undefined:
+        case body.lastName === undefined:
+        case body.email === undefined:
+        case body.avatar === undefined:
+        case body.bio === undefined:
+            return false
+        default:
+            return true
+    }
+}
+
 
 router.get('/login', (req, res) => {
     res.render('login', {page: 'login'})
 })
+
 router.post('/login', passport.authenticate('local',
     {
         successRedirect: '/campgrounds',
@@ -62,6 +77,8 @@ router.get('/logout', (req, res) => {
 
 //User profiles route
 router.get('/users/:id', isLoggedIn, (req, res) => {
+    if(req.params.id === undefined) return res.send(500)
+
     User.findById(req.params.id, (err, foundUser) => {
         if(err){
             req.flash('error', 'Oops! Something went wrong!')
@@ -79,6 +96,8 @@ router.get('/users/:id', isLoggedIn, (req, res) => {
 
 //user - EDIT ROUTE
 router.get("/users/:id/edit", isLoggedIn, (req, res) => {
+    if(req.params.id === undefined) return res.send(500)
+
      User.findById(req.params.id, (err, foundUser) => { 
         if(err){
           res.redirect("back")
@@ -90,6 +109,8 @@ router.get("/users/:id/edit", isLoggedIn, (req, res) => {
 
 //Update ROUTE
 router.put("/users/:id", isLoggedIn, (req, res) => {
+    if(req.params.id === undefined && !__dataCheck(req.body)) return res.send(500)
+   
     const newData = {firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email, avatar: req.body.avatar, bio: req.body.bio};
     User.findByIdAndUpdate(req.params.id, {$set: newData}, (err, user) => {
         if(err){
