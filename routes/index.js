@@ -44,15 +44,10 @@ router.post('/register', (req, res) => {
 function __dataCheck(body) {
     switch(body) {
         case body.username === undefined:
-            return false
         case body.firstName === undefined:
-            return false
         case body.lastName === undefined:
-            return false
         case body.email === undefined:
-            return false
         case body.avatar === undefined:
-            return false
         case body.bio === undefined:
             return false
         default:
